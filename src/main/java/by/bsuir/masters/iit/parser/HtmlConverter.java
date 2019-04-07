@@ -30,11 +30,7 @@ public class HtmlConverter {
                 if (node.getType() == TagType.LINK) {
                     String linkValue = buildContent(node.getChildren())
                             .replaceAll("vdt", "html");
-                    content.append("<")
-                            .append(TagType.LINK.getHtmlValue())
-                            .append(" href=")
-                            .append(linkValue)
-                            .append(">")
+                    content.append(buildOpenLinkTag(linkValue))
                             .append(linkValue)
                             .append(buildCloseTag(TagType.LINK));
                 } else {
@@ -50,6 +46,10 @@ public class HtmlConverter {
 
     private String buildOpenTag(TagType tagType) {
         return "<" + tagType.getHtmlValue() + ">";
+    }
+
+    private String buildOpenLinkTag(String value) {
+        return "<" + TagType.LINK.getHtmlValue() + " href=" + value + ">";
     }
 
     private String buildCloseTag(TagType tagType) {
