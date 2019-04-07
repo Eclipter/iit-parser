@@ -7,13 +7,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TagType {
 
-    VDT_ROOT("vdt"),
-    BOLD("bold"),
-    ITALIC("italic"),
-    STRIKETHROUGH("strikethrough"),
+    VDT_ROOT("vdt", "html"),
+    BOLD("bold", "b"),
+    ITALIC("italic", "i"),
+    STRIKETHROUGH("strikethrough", "s"),
     ;
 
     private String value;
+    private String htmlValue;
 
     public static TagType getTypeByValue(String value) {
         for (TagType tagType : TagType.values()) {
@@ -22,6 +23,6 @@ public enum TagType {
             }
         }
 
-        throw new RuntimeException("Unknown tag: " + value);
+        throw new UnsupportedOperationException("Unknown tag: " + value);
     }
 }

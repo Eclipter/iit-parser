@@ -9,7 +9,7 @@ import java.util.List;
 
 import static by.bsuir.masters.iit.model.TagType.*;
 
-public class Parser {
+public class VdtParser {
 
     public Node parse(String content) {
 
@@ -33,11 +33,11 @@ public class Parser {
 
     private List<Node> parseChildren(String content, Node parent) {
 
-        if (content.equals("")) {
-            return null;
-        }
-
         List<Node> children = new ArrayList<>();
+
+        if (content.equals("")) {
+            return children;
+        }
 
         int position = 0;
 

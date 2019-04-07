@@ -1,7 +1,8 @@
 package by.bsuir.masters.iit.main;
 
 import by.bsuir.masters.iit.model.Node;
-import by.bsuir.masters.iit.parser.Parser;
+import by.bsuir.masters.iit.parser.HtmlConveter;
+import by.bsuir.masters.iit.parser.VdtParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,19 +15,20 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         String inputFilename = "input/example.vdt";
-        String outputFilename = "output/example.txt";
+        String outputFilename = "output/example.html";
 
         String content = Files.readAllLines(Paths.get(inputFilename))
                 .stream()
                 .map(String::trim)
                 .collect(Collectors.joining());
 
-        Parser parser = new Parser();
+        VdtParser vdtParser = new VdtParser();
+        HtmlConveter conveter = new HtmlConveter();
 
-        Node root = parser.parse(content);
+        Node root = vdtParser.parse(content);
 
         System.out.println(root);
 
-//        Files.write(Paths.get(outputFilename), Collections.singletonList(root.getValue()), StandardOpenOption.CREATE);
+        Files.write(Paths.get(outputFilename), Collections.singleton(conveter.toHTML(root)), StandardOpenOption.CREATE);
     }
 }
