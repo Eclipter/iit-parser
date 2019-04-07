@@ -5,9 +5,14 @@ import by.bsuir.masters.iit.model.TagType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -37,10 +42,31 @@ public class TreeBuilder {
         });
     }
 
-    public void findShortestPath(Map<String, Node> graph, String sourceFile, String targetFile) {
+    public List<Node> findShortestPath(Map<String, Node> graph, String sourceFile, String targetFile) {
         Node sourceNode = graph.get(sourceFile);
         Node targetNode = graph.get(targetFile);
 
+        Queue<Node> queue = new LinkedList<>();
+        List<Node> visitedNodes = new ArrayList<>();
 
+        queue.add(sourceNode);
+
+        while (!queue.isEmpty()) {
+            Node node = queue.remove();
+            visitedNodes.add(node);
+
+            if (node.equals(targetNode)) {
+//                visitedNodes.add(targetNode);
+//                return visitedNodes;
+            } else {
+                queue.addAll(node.getChildren()
+                        .stream()
+                        .filter(n -> !visitedNodes.contains(n))
+                        .collect(Collectors.toList())
+                );
+            }
+        }
+
+        throw new RuntimeException("Did not manage to find a path");
     }
 }
