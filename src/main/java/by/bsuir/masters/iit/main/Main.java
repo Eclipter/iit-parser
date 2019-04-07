@@ -52,5 +52,10 @@ public class Main {
                 throw new RuntimeException("IO error", e);
             }
         });
+
+        treeBuilder.setDocMap(docMap);
+        treeBuilder.linkTrees();
+
+        System.out.println("Done.");
     }
 }
