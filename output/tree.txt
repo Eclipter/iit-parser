@@ -1,0 +1,19 @@
+Node{type=VDT_ROOT, value='null', children=[
+    Node{type=null, value='Hello World!', children=[]},
+    Node{type=BOLD, value='null', children=[
+        Node{type=null, value='And this is a bold string', children=[]}
+    ]},
+    Node{type=ITALIC, value='null', children=[
+        Node{type=null, value='Italic string', children=[]}
+    ]},
+    Node{type=BOLD, value='null', children=[
+        Node{type=null, value='Some bold and', children=[]},
+        Node{type=ITALIC, value='null', children=[
+            Node{type=null, value='Some bold-italic', children=[]}
+        ]}
+    ]},
+    Node{type=STRIKETHROUGH, value='null', children=[
+        Node{type=null, value='Strikethrough', children=[]}
+    ]},
+    Node{type=null, value='Some more simple text.', children=[]}
+]}

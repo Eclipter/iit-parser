@@ -1,0 +1,19 @@
+#vdt+
+    Hello World!
+    #bold+
+        And this is a bold string
+    +bold#
+    #italic+
+        Italic string
+    +italic#
+    #bold+
+        Some bold and
+        #italic+
+            Some bold-italic
+        +italic#
+    +bold#
+    #strikethrough+
+        Strikethrough
+    +strikethrough#
+    Some more simple text.
++vdt#
