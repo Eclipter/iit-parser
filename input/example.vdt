@@ -1,19 +1,23 @@
 #vdt+
     Hello World!
-    #bold+
-        And this is a bold string
-    +bold#
-    #italic+
-        Italic string
-    +italic#
-    #bold+
-        Some bold and
-        #italic+
-            Some bold-italic
-        +italic#
-    +bold#
-    #strikethrough+
-        Strikethrough
-    +strikethrough#
+    #par+
+        #bold+
+            And this is a bold string
+        +bold#
+        #par+
+            #italic+
+                Italic string
+            +italic#
+        +par#
+        #bold+
+            Some bold and
+            #italic+
+                Some bold-italic
+            +italic#
+        +bold#
+        #strikethrough+
+            Strikethrough
+        +strikethrough#
+    +par#
     Some more simple text.
 +vdt#

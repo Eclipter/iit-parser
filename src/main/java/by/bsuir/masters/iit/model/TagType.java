@@ -11,6 +11,10 @@ public enum TagType {
     BOLD("bold", "b"),
     ITALIC("italic", "i"),
     STRIKETHROUGH("strikethrough", "s"),
+    PARAGRAPH("par", "p"),
+    UNDERLINED("und", "u"),
+    HEADER_1("head_1", "h1"),
+    HEADER_2("head_2", "h2"),
     ;
 
     private String value;

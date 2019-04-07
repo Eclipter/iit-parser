@@ -48,12 +48,36 @@ public class VdtParser {
 
                 Node node = new Node(type);
 
-                node.setChildren(parseChildren(content.substring(position + Constants.getOpenTag(type).length(),
-                        content.indexOf(Constants.getCloseTag(type), position)), node));
+                int innerPosition = position + Constants.getOpenTag(type).length();
+                int openTagsCount = 0;
+                int closingPositionEnd;
+
+                while (true) {
+                    int nextOpenTagPosition = content.indexOf(Constants.getOpenTag(type), innerPosition);
+                    int nextCloseTagPosition = content.indexOf(Constants.getCloseTag(type), innerPosition);
+
+                    if (nextCloseTagPosition < nextOpenTagPosition || nextOpenTagPosition == -1) {
+                        if (openTagsCount == 0) {
+                            closingPositionEnd = nextCloseTagPosition;
+                            break;
+                        } else {
+                            openTagsCount -= 1;
+                            innerPosition = nextCloseTagPosition + Constants.getCloseTag(type).length();
+                        }
+                    } else {
+                        openTagsCount += 1;
+                        innerPosition = nextOpenTagPosition + Constants.getOpenTag(type).length();
+                    }
+                }
+
+                String innerContent = content.substring(position + Constants.getOpenTag(type).length(),
+                        closingPositionEnd);
+
+                node.setChildren(parseChildren(innerContent, node));
 
                 children.add(node);
 
-                position = content.indexOf(Constants.getCloseTag(type), position) + Constants.getCloseTag(type).length();
+                position = closingPositionEnd + Constants.getCloseTag(type).length();
             } else {
 
                 int openingTagIndex = content.indexOf(Constants.OPEN_START, position);
