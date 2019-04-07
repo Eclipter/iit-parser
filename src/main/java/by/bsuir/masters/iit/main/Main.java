@@ -14,21 +14,34 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        String inputFilename = "input/example.vdt";
-        String outputFilename = "output/example.html";
-
-        String content = Files.readAllLines(Paths.get(inputFilename))
-                .stream()
-                .map(String::trim)
-                .collect(Collectors.joining());
-
         VdtParser vdtParser = new VdtParser();
-        HtmlConverter conveter = new HtmlConverter();
+        HtmlConverter converter = new HtmlConverter();
 
-        Node root = vdtParser.parse(content);
+        String inputDir = "input";
+        String outputDir = "output";
 
-        System.out.println(root);
+        Files.newDirectoryStream(Paths.get(inputDir)).forEach(entry -> {
+            try {
+                String inputFilename = entry.toString();
+                String outputFilename = inputFilename
+                        .replaceAll("input", "output")
+                        .replaceAll("vdt", "html");
 
-        Files.write(Paths.get(outputFilename), Collections.singleton(conveter.toHTML(root)), StandardOpenOption.CREATE);
+                String content = Files.readAllLines(Paths.get(inputFilename))
+                        .stream()
+                        .map(String::trim)
+                        .collect(Collectors.joining());
+
+                Node root = vdtParser.parse(content);
+
+                System.out.println(root);
+
+                Files.write(Paths.get(outputFilename),
+                        Collections.singleton(converter.toHTML(root)),
+                        StandardOpenOption.CREATE);
+            } catch (IOException e) {
+                throw new RuntimeException("IO error", e);
+            }
+        });
     }
 }

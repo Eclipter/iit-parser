@@ -27,9 +27,21 @@ public class HtmlConverter {
             if (node.getType() == null) {
                 content.append(node.getValue());
             } else {
-                content.append(buildOpenTag(node.getType()))
-                        .append(buildContent(node.getChildren()))
-                        .append(buildCloseTag(node.getType()));
+                if (node.getType() == TagType.LINK) {
+                    String linkValue = buildContent(node.getChildren())
+                            .replaceAll("vdt", "html");
+                    content.append("<")
+                            .append(TagType.LINK.getHtmlValue())
+                            .append(" href=")
+                            .append(linkValue)
+                            .append(">")
+                            .append(linkValue)
+                            .append(buildCloseTag(TagType.LINK));
+                } else {
+                    content.append(buildOpenTag(node.getType()))
+                            .append(buildContent(node.getChildren()))
+                            .append(buildCloseTag(node.getType()));
+                }
             }
         });
 

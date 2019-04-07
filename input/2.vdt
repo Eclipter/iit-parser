@@ -1,0 +1,22 @@
+#vdt+
+    #cnt+
+        #head_1+
+            Another document!
+        +head_1#
+        Here is the result of VDT file parsing
+    +cnt#
+    #par+
+        #bold+
+            And this is a bold string
+        +bold#
+    +par#
+    #link+
+        example.vdt
+    +link#
+    #par+
+        Some more simple text.
+    +par#
+    #head_2+
+        No simple list, sorry...
+    +head_2#
++vdt#

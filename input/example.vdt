@@ -30,7 +30,12 @@
             +strikethrough#
         +par#
     +par#
-    Some more simple text.
+    #link+
+        2.vdt
+    +link#
+    #par+
+        Some more simple text.
+    +par#
     #head_2+
         And here is a simple list
     +head_2#

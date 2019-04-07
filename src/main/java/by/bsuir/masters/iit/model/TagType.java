@@ -17,7 +17,8 @@ public enum TagType {
     HEADER_2("head_2", "h2"),
     LIST("list", "ul"),
     LIST_ELEMENT("lel", "li"),
-    CENTER("cnt", "center")
+    CENTER("cnt", "center"),
+    LINK("link", "a")
     ;
 
     private String value;
