@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class GraphOperator {
         });
     }
 
-    public List<Node> findShortestPath(Map<String, Node> graph, String sourceFile, String targetFile) {
+    public List<Node> findPathBfs(Map<String, Node> graph, String sourceFile, String targetFile) {
         Node sourceNode = graph.get(sourceFile);
         Node targetNode = graph.get(targetFile);
 

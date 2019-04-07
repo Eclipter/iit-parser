@@ -57,7 +57,7 @@ public class Main {
         });
 
         Map<String, Node> graph = graphOperator.buildDocGraph(docMap);
-        List<Node> shortestPath = graphOperator.findShortestPath(graph, FILE_1, FILE_2);
+        List<Node> shortestPath = graphOperator.findPathBfs(graph, FILE_1, FILE_2);
 
         System.out.println(shortestPath.stream().map(Node::getValue).collect(Collectors.joining(", ")));
 
