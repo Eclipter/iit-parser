@@ -1,7 +1,7 @@
 package by.bsuir.masters.iit.main;
 
 import by.bsuir.masters.iit.model.Node;
-import by.bsuir.masters.iit.parser.HtmlConveter;
+import by.bsuir.masters.iit.parser.HtmlConverter;
 import by.bsuir.masters.iit.parser.VdtParser;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class Main {
                 .collect(Collectors.joining());
 
         VdtParser vdtParser = new VdtParser();
-        HtmlConveter conveter = new HtmlConveter();
+        HtmlConverter conveter = new HtmlConverter();
 
         Node root = vdtParser.parse(content);
 

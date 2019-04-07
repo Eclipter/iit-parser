@@ -5,7 +5,7 @@ import by.bsuir.masters.iit.model.TagType;
 
 import java.util.List;
 
-public class HtmlConveter {
+public class HtmlConverter {
 
     public String toHTML(Node node) {
 
