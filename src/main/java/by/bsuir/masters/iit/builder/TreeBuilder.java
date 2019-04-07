@@ -5,7 +5,7 @@ import by.bsuir.masters.iit.model.TagType;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,20 +13,34 @@ import java.util.Map;
 @Setter
 public class TreeBuilder {
 
-    private Map<String, Node> docMap;
+    public Map<String, Node> buildDocGraph(Map<String, Node> docMap) {
+        Map<String, Node> graph = new HashMap<>();
 
-    public void linkTrees() {
-        docMap.forEach((key, value) -> linkChildren(value.getChildren()));
+        docMap.forEach((key, value) -> {
+            Node node = new Node();
+            node.setValue(key);
+            graph.put(key, node);
+        });
+
+        docMap.forEach((key, value) -> addLinks(value.getChildren(), graph, graph.get(key)));
+
+        return graph;
     }
 
-    private void linkChildren(List<Node> children) {
+    private void addLinks(List<Node> children, Map<String, Node> graph, Node targetNode) {
         children.forEach(node -> {
             if (node.getType() == TagType.LINK) {
-                node.setValue(node.getChildren().get(0).getValue());
-                node.setChildren(Collections.singletonList(docMap.get(node.getValue())));
+                targetNode.getChildren().add(graph.get(node.getChildren().get(0).getValue()));
             } else {
-                linkChildren(node.getChildren());
+                addLinks(node.getChildren(), graph, targetNode);
             }
         });
+    }
+
+    public void findShortestPath(Map<String, Node> graph, String sourceFile, String targetFile) {
+        Node sourceNode = graph.get(sourceFile);
+        Node targetNode = graph.get(targetFile);
+
+
     }
 }

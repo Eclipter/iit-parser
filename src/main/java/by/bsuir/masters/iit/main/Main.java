@@ -53,8 +53,7 @@ public class Main {
             }
         });
 
-        treeBuilder.setDocMap(docMap);
-        treeBuilder.linkTrees();
+        Map<String, Node> graph = treeBuilder.buildDocGraph(docMap);
 
         System.out.println("Done.");
     }
