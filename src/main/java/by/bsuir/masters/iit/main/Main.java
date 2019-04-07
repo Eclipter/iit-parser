@@ -13,19 +13,21 @@ import java.util.stream.Collectors;
 
 public class Main {
 
+    private static final String INPUT_DIR_NAME = "input";
+    private static final String OUTPUT_DIR_NAME = "output";
+    private static final String VDT_FILE_EXTENSION = "vdt";
+    private static final String HTML_FILE_EXTENSION = "html";
+
     public static void main(String[] args) throws IOException {
         VdtParser vdtParser = new VdtParser();
         HtmlConverter converter = new HtmlConverter();
 
-        String inputDir = "input";
-        String outputDir = "output";
-
-        Files.newDirectoryStream(Paths.get(inputDir)).forEach(entry -> {
+        Files.newDirectoryStream(Paths.get(INPUT_DIR_NAME)).forEach(entry -> {
             try {
                 String inputFilename = entry.toString();
                 String outputFilename = inputFilename
-                        .replaceAll("input", "output")
-                        .replaceAll("vdt", "html");
+                        .replaceAll(INPUT_DIR_NAME, OUTPUT_DIR_NAME)
+                        .replaceAll(VDT_FILE_EXTENSION, HTML_FILE_EXTENSION);
 
                 String content = Files.readAllLines(Paths.get(inputFilename))
                         .stream()
