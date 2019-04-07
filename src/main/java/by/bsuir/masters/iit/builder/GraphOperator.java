@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class TreeBuilder {
+public class GraphOperator {
 
     public Map<String, Node> buildDocGraph(Map<String, Node> docMap) {
         Map<String, Node> graph = new HashMap<>();
@@ -48,22 +48,27 @@ public class TreeBuilder {
 
         Queue<Node> queue = new LinkedList<>();
         List<Node> visitedNodes = new ArrayList<>();
+        List<Node> path = new ArrayList<>();
 
         queue.add(sourceNode);
 
         while (!queue.isEmpty()) {
             Node node = queue.remove();
             visitedNodes.add(node);
+            path.add(node);
 
             if (node.equals(targetNode)) {
-//                visitedNodes.add(targetNode);
-//                return visitedNodes;
+                return path;
             } else {
-                queue.addAll(node.getChildren()
+                List<Node> nonVisitedChildren = node.getChildren()
                         .stream()
                         .filter(n -> !visitedNodes.contains(n))
-                        .collect(Collectors.toList())
-                );
+                        .collect(Collectors.toList());
+                if (nonVisitedChildren.isEmpty()) {
+                    path.remove(node);
+                } else {
+                    queue.addAll(nonVisitedChildren);
+                }
             }
         }
 

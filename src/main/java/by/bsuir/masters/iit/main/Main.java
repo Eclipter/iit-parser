@@ -1,6 +1,6 @@
 package by.bsuir.masters.iit.main;
 
-import by.bsuir.masters.iit.builder.TreeBuilder;
+import by.bsuir.masters.iit.builder.GraphOperator;
 import by.bsuir.masters.iit.model.Node;
 import by.bsuir.masters.iit.parser.HtmlConverter;
 import by.bsuir.masters.iit.parser.VdtParser;
@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,11 +21,13 @@ public class Main {
     private static final String OUTPUT_DIR_NAME = "output";
     private static final String VDT_FILE_EXTENSION = "vdt";
     private static final String HTML_FILE_EXTENSION = "html";
+    private static final String FILE_1 = "link1.vdt";
+    private static final String FILE_2 = "link6.vdt";
 
     public static void main(String[] args) throws IOException {
         VdtParser vdtParser = new VdtParser();
         HtmlConverter converter = new HtmlConverter();
-        TreeBuilder treeBuilder = new TreeBuilder();
+        GraphOperator graphOperator = new GraphOperator();
 
         Map<String, Node> docMap = new HashMap<>();
 
@@ -53,9 +56,10 @@ public class Main {
             }
         });
 
-        Map<String, Node> graph = treeBuilder.buildDocGraph(docMap);
+        Map<String, Node> graph = graphOperator.buildDocGraph(docMap);
+        List<Node> shortestPath = graphOperator.findShortestPath(graph, FILE_1, FILE_2);
 
-
+        System.out.println(shortestPath.stream().map(Node::getValue).collect(Collectors.joining(", ")));
 
         System.out.println("Done.");
     }
