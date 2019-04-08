@@ -45,9 +45,9 @@ public class GraphOperator {
         });
     }
 
-    public List<GraphNode> findShortestPath(Map<String, GraphNode> graph, String sourceFile, String targetFile) {
+    public Map<GraphNode, List<GraphNode>> findShortestPath(Map<String,
+        GraphNode> graph, String sourceFile) {
         GraphNode sourceNode = graph.get(sourceFile);
-        GraphNode targetNode = graph.get(targetFile);
 
         Queue<GraphNode> queue = new PriorityQueue<>(Comparator.comparing(GraphNode::getMark));
         Set<GraphNode> visitedNodes = new HashSet<>();
@@ -78,9 +78,6 @@ public class GraphOperator {
             queue.addAll(nonVisitedChildren);
         }
 
-        List<GraphNode> resultPath = pathMap.get(targetNode);
-        resultPath.add(targetNode);
-
-        return resultPath;
+        return pathMap;
     }
 }

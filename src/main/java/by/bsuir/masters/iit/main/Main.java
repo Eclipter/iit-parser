@@ -5,7 +5,6 @@ import by.bsuir.masters.iit.model.GraphNode;
 import by.bsuir.masters.iit.model.Node;
 import by.bsuir.masters.iit.parser.HtmlConverter;
 import by.bsuir.masters.iit.parser.VdtParser;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,7 +22,6 @@ public class Main {
     private static final String VDT_FILE_EXTENSION = "vdt";
     private static final String HTML_FILE_EXTENSION = "html";
     private static final String FILE_1 = "link1.vdt";
-    private static final String FILE_2 = "link6.vdt";
 
     public static void main(String[] args) throws IOException {
         VdtParser vdtParser = new VdtParser();
@@ -58,9 +56,13 @@ public class Main {
         });
 
         Map<String, GraphNode> graph = graphOperator.buildDocGraph(docMap);
-        List<GraphNode> shortestPath = graphOperator.findShortestPath(graph, FILE_1, FILE_2);
+        Map<GraphNode, List<GraphNode>> pathMap = graphOperator.findShortestPath(graph, FILE_1);
 
-        System.out.println(shortestPath.stream().map(GraphNode::getValue).collect(Collectors.joining(", ")));
+        pathMap.forEach((key, value) -> {
+            System.out.println("Shortest path from " + FILE_1 + " to " + key.getValue() + ":");
+            System.out
+                .println(value.stream().map(GraphNode::getValue).collect(Collectors.joining(", ")));
+        });
 
         System.out.println("Done.");
     }
