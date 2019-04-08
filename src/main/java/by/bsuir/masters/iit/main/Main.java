@@ -1,8 +1,10 @@
 package by.bsuir.masters.iit.main;
 
 import by.bsuir.masters.iit.builder.GraphOperator;
+import by.bsuir.masters.iit.builder.SearchProcessor;
 import by.bsuir.masters.iit.model.GraphNode;
 import by.bsuir.masters.iit.model.Node;
+import by.bsuir.masters.iit.model.TfIdfInfo;
 import by.bsuir.masters.iit.parser.HtmlConverter;
 import by.bsuir.masters.iit.parser.VdtParser;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -27,6 +30,7 @@ public class Main {
         VdtParser vdtParser = new VdtParser();
         HtmlConverter converter = new HtmlConverter();
         GraphOperator graphOperator = new GraphOperator();
+        SearchProcessor searchProcessor = new SearchProcessor();
 
         Map<String, Node> docMap = new HashMap<>();
 
@@ -62,6 +66,11 @@ public class Main {
             System.out
                 .println(value.stream().map(GraphNode::getValue).collect(Collectors.joining(", ")));
         });
+
+        Map<String, Integer> searchResults =
+                searchProcessor.findRelevantDocs("this is", searchProcessor.buildTermFileDictionary(docMap));
+
+        System.out.println(searchResults);
 
         System.out.println("Done.");
     }
