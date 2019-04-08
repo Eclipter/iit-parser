@@ -1,27 +1,31 @@
 package by.bsuir.masters.iit.builder;
 
+import by.bsuir.masters.iit.model.GraphNode;
 import by.bsuir.masters.iit.model.Node;
 import by.bsuir.masters.iit.model.TagType;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
 public class GraphOperator {
 
-    public Map<String, Node> buildDocGraph(Map<String, Node> docMap) {
-        Map<String, Node> graph = new HashMap<>();
+    public Map<String, GraphNode> buildDocGraph(Map<String, Node> docMap) {
+        Map<String, GraphNode> graph = new HashMap<>();
 
         docMap.forEach((key, value) -> {
-            Node node = new Node();
+            GraphNode node = new GraphNode();
             node.setValue(key);
             graph.put(key, node);
         });
@@ -31,7 +35,7 @@ public class GraphOperator {
         return graph;
     }
 
-    private void addLinks(List<Node> children, Map<String, Node> graph, Node targetNode) {
+    private void addLinks(List<Node> children, Map<String, GraphNode> graph, GraphNode targetNode) {
         children.forEach(node -> {
             if (node.getType() == TagType.LINK) {
                 targetNode.getChildren().add(graph.get(node.getChildren().get(0).getValue()));
@@ -41,36 +45,42 @@ public class GraphOperator {
         });
     }
 
-    public List<Node> findPathBfs(Map<String, Node> graph, String sourceFile, String targetFile) {
-        Node sourceNode = graph.get(sourceFile);
-        Node targetNode = graph.get(targetFile);
+    public List<GraphNode> findShortestPath(Map<String, GraphNode> graph, String sourceFile, String targetFile) {
+        GraphNode sourceNode = graph.get(sourceFile);
+        GraphNode targetNode = graph.get(targetFile);
 
-        Queue<Node> queue = new LinkedList<>();
-        List<Node> visitedNodes = new ArrayList<>();
-        List<Node> path = new ArrayList<>();
+        Queue<GraphNode> queue = new PriorityQueue<>(Comparator.comparing(GraphNode::getMark));
+        Set<GraphNode> visitedNodes = new HashSet<>();
+        Map<GraphNode, List<GraphNode>> pathMap = new HashMap<>();
+
+        pathMap.put(sourceNode, Collections.emptyList());
+        sourceNode.setMark(0);
 
         queue.add(sourceNode);
 
         while (!queue.isEmpty()) {
-            Node node = queue.remove();
+            GraphNode node = queue.remove();
             visitedNodes.add(node);
-            path.add(node);
 
-            if (node.equals(targetNode)) {
-                return path;
-            } else {
-                List<Node> nonVisitedChildren = node.getChildren()
-                        .stream()
-                        .filter(n -> !visitedNodes.contains(n))
-                        .collect(Collectors.toList());
-                if (nonVisitedChildren.isEmpty()) {
-                    path.remove(node);
-                } else {
-                    queue.addAll(nonVisitedChildren);
+            List<GraphNode> nonVisitedChildren =
+                node.getChildren().stream().filter(n -> !visitedNodes.contains(n))
+                    .collect(Collectors.toList());
+
+            nonVisitedChildren.forEach(child -> {
+                if (node.getMark() + 1 < child.getMark()) {
+                    child.setMark(node.getMark() + 1);
+                    List<GraphNode> path = new ArrayList<>(pathMap.get(node));
+                    path.add(node);
+                    pathMap.put(child, path);
                 }
-            }
+            });
+
+            queue.addAll(nonVisitedChildren);
         }
 
-        throw new RuntimeException("Did not manage to find a path");
+        List<GraphNode> resultPath = pathMap.get(targetNode);
+        resultPath.add(targetNode);
+
+        return resultPath;
     }
 }

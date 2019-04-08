@@ -1,6 +1,7 @@
 package by.bsuir.masters.iit.main;
 
 import by.bsuir.masters.iit.builder.GraphOperator;
+import by.bsuir.masters.iit.model.GraphNode;
 import by.bsuir.masters.iit.model.Node;
 import by.bsuir.masters.iit.parser.HtmlConverter;
 import by.bsuir.masters.iit.parser.VdtParser;
@@ -56,10 +57,10 @@ public class Main {
             }
         });
 
-        Map<String, Node> graph = graphOperator.buildDocGraph(docMap);
-        List<Node> shortestPath = graphOperator.findPathBfs(graph, FILE_1, FILE_2);
+        Map<String, GraphNode> graph = graphOperator.buildDocGraph(docMap);
+        List<GraphNode> shortestPath = graphOperator.findShortestPath(graph, FILE_1, FILE_2);
 
-        System.out.println(shortestPath.stream().map(Node::getValue).collect(Collectors.joining(", ")));
+        System.out.println(shortestPath.stream().map(GraphNode::getValue).collect(Collectors.joining(", ")));
 
         System.out.println("Done.");
     }
