@@ -55,8 +55,7 @@ public class Main {
             }
         });
 
-        Map<String, GraphNode> graph = graphOperator.buildDocGraph(docMap);
-        Map<GraphNode, List<GraphNode>> pathMap = graphOperator.findShortestPath(graph, FILE_1);
+        Map<GraphNode, List<GraphNode>> pathMap = graphOperator.findShortestPaths(docMap, FILE_1);
 
         pathMap.forEach((key, value) -> {
             System.out.println("Shortest path from " + FILE_1 + " to " + key.getValue() + ":");

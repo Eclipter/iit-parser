@@ -18,29 +18,9 @@ import java.util.stream.Collectors;
 
 public class GraphOperator {
 
-    public Map<String, GraphNode> buildDocGraph(Map<String, Node> docMap) {
-
-        Map<String, GraphNode> graph = docMap.keySet()
-            .stream()
-            .collect(Collectors.toMap(Function.identity(), GraphNode::new));
-
-        docMap.forEach((key, value) -> addLinks(value.getChildren(), graph, graph.get(key)));
-
-        return graph;
-    }
-
-    private void addLinks(List<Node> children, Map<String, GraphNode> graph, GraphNode targetNode) {
-        children.forEach(node -> {
-            if (node.getType() == TagType.LINK) {
-                targetNode.getChildren().add(graph.get(node.getChildren().get(0).getValue()));
-            } else {
-                addLinks(node.getChildren(), graph, targetNode);
-            }
-        });
-    }
-
-    public Map<GraphNode, List<GraphNode>> findShortestPath(Map<String,
-        GraphNode> graph, String sourceFile) {
+    public Map<GraphNode, List<GraphNode>> findShortestPaths(Map<String, Node> docMap,
+        String sourceFile) {
+        Map<String, GraphNode> graph = buildDocGraph(docMap);
         GraphNode sourceNode = graph.get(sourceFile);
 
         Queue<GraphNode> queue = new PriorityQueue<>(Comparator.comparing(GraphNode::getMark));
@@ -73,5 +53,26 @@ public class GraphOperator {
         }
 
         return pathMap;
+    }
+
+    private Map<String, GraphNode> buildDocGraph(Map<String, Node> docMap) {
+
+        Map<String, GraphNode> graph = docMap.keySet()
+            .stream()
+            .collect(Collectors.toMap(Function.identity(), GraphNode::new));
+
+        docMap.forEach((key, value) -> addLinks(value.getChildren(), graph, graph.get(key)));
+
+        return graph;
+    }
+
+    private void addLinks(List<Node> children, Map<String, GraphNode> graph, GraphNode targetNode) {
+        children.forEach(node -> {
+            if (node.getType() == TagType.LINK) {
+                targetNode.getChildren().add(graph.get(node.getChildren().get(0).getValue()));
+            } else {
+                addLinks(node.getChildren(), graph, targetNode);
+            }
+        });
     }
 }
