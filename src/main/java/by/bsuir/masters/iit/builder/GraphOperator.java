@@ -13,18 +13,16 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GraphOperator {
 
     public Map<String, GraphNode> buildDocGraph(Map<String, Node> docMap) {
-        Map<String, GraphNode> graph = new HashMap<>();
 
-        docMap.forEach((key, value) -> {
-            GraphNode node = new GraphNode();
-            node.setValue(key);
-            graph.put(key, node);
-        });
+        Map<String, GraphNode> graph = docMap.keySet()
+            .stream()
+            .collect(Collectors.toMap(Function.identity(), GraphNode::new));
 
         docMap.forEach((key, value) -> addLinks(value.getChildren(), graph, graph.get(key)));
 
