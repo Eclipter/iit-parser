@@ -4,7 +4,6 @@ import by.bsuir.masters.iit.builder.GraphOperator;
 import by.bsuir.masters.iit.builder.SearchProcessor;
 import by.bsuir.masters.iit.model.GraphNode;
 import by.bsuir.masters.iit.model.Node;
-import by.bsuir.masters.iit.model.TfIdfInfo;
 import by.bsuir.masters.iit.parser.HtmlConverter;
 import by.bsuir.masters.iit.parser.VdtParser;
 import java.io.IOException;
@@ -15,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -25,6 +23,7 @@ public class Main {
     private static final String VDT_FILE_EXTENSION = "vdt";
     private static final String HTML_FILE_EXTENSION = "html";
     private static final String FILE_1 = "link1.vdt";
+    private static final String QUERY_STRING = "this is";
 
     public static void main(String[] args) throws IOException {
         VdtParser vdtParser = new VdtParser();
@@ -67,8 +66,8 @@ public class Main {
                 .println(value.stream().map(GraphNode::getValue).collect(Collectors.joining(", ")));
         });
 
-        Map<String, Double> searchResults =
-                searchProcessor.findRelevantDocs("this is", searchProcessor.buildTermFileDictionary(docMap));
+        Map<String, Double> searchResults = searchProcessor
+            .findRelevantDocs(QUERY_STRING, searchProcessor.buildTermFileDictionary(docMap));
 
         System.out.println(searchResults);
 
