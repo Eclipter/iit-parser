@@ -67,7 +67,7 @@ public class Main {
                 .println(value.stream().map(GraphNode::getValue).collect(Collectors.joining(", ")));
         });
 
-        Map<String, Integer> searchResults =
+        Map<String, Double> searchResults =
                 searchProcessor.findRelevantDocs("this is", searchProcessor.buildTermFileDictionary(docMap));
 
         System.out.println(searchResults);

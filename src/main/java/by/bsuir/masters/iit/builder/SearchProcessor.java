@@ -2,9 +2,11 @@ package by.bsuir.masters.iit.builder;
 
 import by.bsuir.masters.iit.model.Node;
 import by.bsuir.masters.iit.model.TfIdfInfo;
-
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class SearchProcessor {
 
-    public Map<String, Integer> findRelevantDocs(String query, TfIdfInfo tfIdfInfo) {
+    public Map<String, Double> findRelevantDocs(String query, TfIdfInfo tfIdfInfo) {
         Map<String, Long> wordCounts = getWords(query)
                 .stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -23,8 +25,46 @@ public class SearchProcessor {
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         entry -> tfIdfInfo.getIdfs().getOrDefault(entry.getKey(), 0d)));
 
-        //TODO: compute cosine similarity
-        return null;
+        Map<String, Double> fileRelevancyMap = new HashMap<>();
+
+        queryTfIdfs.forEach((word, queryTfIdf) -> tfIdfInfo.getTermFilesTfIdfDictionary()
+            .getOrDefault(word, Collections.emptyMap()).forEach((filename, value) -> {
+                if (!fileRelevancyMap.containsKey(filename)) {
+                    List<Double> fileTfIdfs = queryTfIdfs.keySet().stream().map(
+                        entry -> tfIdfInfo.getTermFilesTfIdfDictionary()
+                            .getOrDefault(entry, Collections.emptyMap()).getOrDefault(filename, 0d))
+                        .collect(Collectors.toList());
+
+                    fileRelevancyMap
+                        .put(filename, computeCosineSimilarity(
+                            new ArrayList<>(queryTfIdfs.values()), fileTfIdfs));
+                }
+            }));
+        return fileRelevancyMap.entrySet().stream()
+            .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors
+                .toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+    }
+
+    private Double computeCosineSimilarity(List<Double> queryTfIdfs, List<Double> fileTfIfs) {
+        if (queryTfIdfs.size() != fileTfIfs.size()) {
+            throw new RuntimeException("TfIdfs data sizes do not match");
+        }
+        double dotProduct = 0;
+        double queryNorm = 0;
+        double fileNorm = 0;
+        for (int i = 0; i < queryTfIdfs.size(); i++) {
+            dotProduct += queryTfIdfs.get(i) * fileTfIfs.get(i);
+            queryNorm += Math.pow(queryTfIdfs.get(i), 2);
+            fileNorm += Math.pow(fileTfIfs.get(i), 2);
+        }
+
+        queryNorm = Math.sqrt(queryNorm);
+        fileNorm = Math.sqrt(fileNorm);
+        if (queryNorm * fileNorm == 0) {
+            return 0d;
+        } else {
+            return dotProduct / (queryNorm * fileNorm);
+        }
     }
 
     public TfIdfInfo buildTermFileDictionary(Map<String, Node> docMap) {
@@ -50,7 +90,7 @@ public class SearchProcessor {
     }
 
     private Double getTermFrequency(Map<String, Long> wordCounts, String term) {
-        return (double) (Optional.ofNullable(wordCounts.get(term)).orElse(0L) / wordCounts.keySet().size());
+        return ((double) Optional.ofNullable(wordCounts.get(term)).orElse(0L) / wordCounts.keySet().size());
     }
 
     private Double getInverseDocumentFrequency(Map<String, Map<String, Long>> wordCountsForFiles, String term) {
