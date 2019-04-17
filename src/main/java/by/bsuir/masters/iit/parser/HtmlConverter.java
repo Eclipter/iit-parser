@@ -1,6 +1,7 @@
 package by.bsuir.masters.iit.parser;
 
 import by.bsuir.masters.iit.model.Node;
+import by.bsuir.masters.iit.model.ReplacedLiteral;
 import by.bsuir.masters.iit.model.TagType;
 
 import java.util.List;
@@ -41,7 +42,13 @@ public class HtmlConverter {
             }
         });
 
-        return content.toString();
+        String result = content.toString();
+
+        for (ReplacedLiteral replacedLiteral : ReplacedLiteral.values()) {
+            result = result.replaceAll(replacedLiteral.getEncodedValue(), replacedLiteral.getDecodedValue());
+        }
+
+        return result;
     }
 
     private String buildOpenTag(TagType tagType) {

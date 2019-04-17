@@ -7,7 +7,7 @@
     +cnt#
     #par+
         #bold+
-            And this is a bold string
+            And this is a bold string -12&%hashtag
         +bold#
         #par+
             #italic+
@@ -34,7 +34,7 @@
         2.vdt
     +link#
     #par+
-        Some more simple text.
+        Some more simple text. Two -13&% two is four. Minus 1 that's three - quick maths.
     +par#
     #head_2+
         And here is a simple list
